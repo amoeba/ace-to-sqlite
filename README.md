@@ -30,9 +30,12 @@ This makes that easy.
 
 ## Running
 
+Note: Wait until ACE DB has fully come up.
+
 - Export to CSV
-  `docker exec -it ace-db /bin/bash`
+  - `docker exec -it ace-db /bin/sh /scripts/dump_ace.sh`
+  - This produces files in `./export`
 - Convert to SQLite
-  `csvs-to-sqlite export/\*.csv`
+  - `csvs-to-sqlite ./export/*.csv`
 - Publish to Vercel
-  `datasette publish...`
+  - `datasette publish...` <--- TODO
