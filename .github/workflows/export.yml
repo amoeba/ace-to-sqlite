@@ -1,0 +1,27 @@
+name: Export ACE to SQLite
+on: workflow_dispatch
+
+jobs:
+  start-database:
+    runs-on: ubuntu-latest
+    container: node:10.18-jessie
+
+    services:
+      mysql:
+        image: mysql
+        env:
+          MYSQL_ROOT_PASSWORD: password
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd mysqladmin ping -h 127.0.0.1 -u root --password=$$MYSQL_ROOT_PASSWORD
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Check out ACE
+        uses: actions/checkout@v3
+        with:
+          repository: ACEmulator/ACE
