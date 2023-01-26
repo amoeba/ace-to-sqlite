@@ -64,6 +64,13 @@ jobs:
         run: csvs-to-sqlite -s \t ./ace_shard/* ace_shard.db
       - name: Create World database
         run: csvs-to-sqlite -s \t ./ace_world/* ace_world.db
+      - uses: actions/upload-artifact@v3
+        with:
+          name: databases
+          path: |
+            ace_auth.db
+            ace_shard.db
+            ace_world.db
       - name: Publish
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
