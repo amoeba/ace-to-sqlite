@@ -25,7 +25,7 @@ echo "$DBS" | tr ' ' '\n' | while read -r db; do
     outfile="/var/lib/mysql-files/$db/$table.csv"
 
     # Headers
-    mysql -u $DBUSERNAME --password=$DBPASSWORD -B -e "SELECT distinct column_name FROM information_schema.columns WHERE table_name = '$table';" | awk '{print $1}' | grep -iv ^COLUMN_NAME$ | sed 's/^/"/g;s/$/"/g' | tr '\n' ',' > "$outfile"
+    mysql -u $DBUSERNAME --password=$DBPASSWORD -B -e "SELECT distinct column_name FROM information_schema.columns WHERE table_name = '$table';" | awk '{print $1}' | grep -iv ^COLUMN_NAME$ | sed 's/^/"/g;s/$/"/g' | tr '\n' ',' | sed 's/.$//' > "$outfile"
     echo "" >> "$outfile"
 
     # Data
