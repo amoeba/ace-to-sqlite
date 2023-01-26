@@ -55,16 +55,16 @@ jobs:
         with:
           name: export
       - name: Display structure of downloaded files
-        run: ls -R
+        run: tree .
       - name: Install datasette and friends
         run: python -m pip install datasette csvs-to-sqlite datasette-publish-vercel
       - name: Create Auth database
-        run: csvs-to-sqlite ace_auth* ace_auth.db
+        run: csvs-to-sqlite ./ace_auth/* ace_auth.db
       - name: Create Shard database
-        run: csvs-to-sqlite ace_shard* ace_shard.db
+        run: csvs-to-sqlite ./ace_shard/* ace_shard.db
       - name: Create World database
-        run: csvs-to-sqlite ace_world* ace_world.db
+        run: csvs-to-sqlite ./ace_world/* ace_world.db
       - name: Publish
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: datasette publish vercel --project ace --token $VERCEL_TOKEN *.db 
+        run: datasette publish vercel --project ace --token $VERCEL_TOKEN *.db

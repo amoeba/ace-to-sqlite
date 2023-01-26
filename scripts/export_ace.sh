@@ -13,13 +13,16 @@ TEMPFILE="$WORKDIR/tempdata"
 echo "$DBS" | tr ' ' '\n' | while read -r db; do
   echo "Exporting database $db..."
 
+  # Create folder for each db
+  mkdir "$WORKDIR/$db"
+
   # Get tables for db
   TABLES=$(mysql -u $DBUSERNAME --password=$DBPASSWORD -B -e "SELECT distinct table_name FROM information_schema.columns WHERE table_schema = '$db';" | awk '{print $1}' | grep -iv ^TABLE_NAME)
 
   for table in $TABLES; do
     echo "Exporting table $table..."
 
-    outfile="/var/lib/mysql-files/$db-$table.csv"
+    outfile="/var/lib/mysql-files/$db/$table.csv"
 
     # Headers
     mysql -u $DBUSERNAME --password=$DBPASSWORD -B -e "SELECT distinct column_name FROM information_schema.columns WHERE table_name = '$table';" | awk '{print $1}' | grep -iv ^COLUMN_NAME$ | sed 's/^/"/g;s/$/"/g' | tr '\n' ',' > "$outfile"
