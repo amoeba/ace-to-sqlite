@@ -29,7 +29,7 @@ echo "$DBS" | tr ' ' '\n' | while read -r db; do
     echo "" >> "$outfile"
 
     # Data
-    mysql -u $DBUSERNAME --password=$DBPASSWORD "$db" -B -e "SELECT * INTO OUTFILE '$TEMPFILE' FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' FROM $table;"
+    mysql -u $DBUSERNAME --password=$DBPASSWORD "$db" -B -e "SELECT * INTO OUTFILE '$TEMPFILE' FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '""' FROM $table;"
     cat $TEMPFILE >> "$outfile"
     rm $TEMPFILE
 
