@@ -67,4 +67,4 @@ jobs:
       - name: Publish
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: datasette publish vercel --project ace --token $VERCEL_TOKEN *.db
+        run: datasette publish vercel --project ace-db --token $VERCEL_TOKEN *.db
