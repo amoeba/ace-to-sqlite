@@ -22,14 +22,14 @@ echo "$DBS" | tr ' ' '\n' | while read -r db; do
   for table in $TABLES; do
     echo "Exporting table $table..."
 
-    outfile="/var/lib/mysql-files/$db/$table.csv"
+    outfile="/var/lib/mysql-files/$db/$table.tsv"
 
     # Headers
     mysql -u $DBUSERNAME --password=$DBPASSWORD -B -e "SELECT distinct column_name FROM information_schema.columns WHERE table_name = '$table';" | awk '{print $1}' | grep -iv ^COLUMN_NAME$ | sed 's/^/"/g;s/$/"/g' | tr '\n' ',' | sed 's/.$//' > "$outfile"
     echo "" >> "$outfile"
 
     # Data
-    mysql -u $DBUSERNAME --password=$DBPASSWORD "$db" -B -e "SELECT * INTO OUTFILE '$TEMPFILE' FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '""' FROM $table;"
+    mysql -u $DBUSERNAME --password=$DBPASSWORD "$db" -B -e "SELECT * INTO OUTFILE '$TEMPFILE' FIELDS TERMINATED BY '\t' FROM $table;"
     cat $TEMPFILE >> "$outfile"
     rm $TEMPFILE
 
