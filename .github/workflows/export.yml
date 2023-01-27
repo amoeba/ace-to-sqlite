@@ -1,6 +1,5 @@
 name: Export ACE to SQLite
 on:
-  - push
   - workflow_dispatch
 
 jobs:
