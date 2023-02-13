@@ -11,14 +11,6 @@ jobs:
         uses: actions/checkout@v3
       - name: Start MySQL
         run: sudo systemctl start mysql.service
-      - name: Download latest ACE release
-        uses: robinraju/release-downloader@v1.7
-        with:
-          repository: ACEmulator/ace
-          latest: true
-          fileName: ACE.Server.zip
-      - name: Decompress latest release
-        run: unzip ACE.Server.zip
       - name: Download latest World release
         uses: robinraju/release-downloader@v1.7
         with:
@@ -33,19 +25,10 @@ jobs:
         run: sudo sh scripts/export.sh
       - name: Relax permissions
         run: sudo chmod -R o+rwx /var/lib/mysql-files
-      - uses: actions/upload-artifact@v3
-        with:
-          name: export
-          path: /var/lib/mysql-files/
-  publish:
-    runs-on: macos-latest
-    needs: export
-    steps:
-      - uses: actions/download-artifact@v3
-        with:
-          name: export
       - name: Install datasette and csvs-to-sqlite
         run: python3 -m pip install datasette csvs-to-sqlite
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
       - name: Create Auth database
         run: csvs-to-sqlite -s \t ./ace_auth/*.tsv ace_auth.db
       - name: Create Shard database
@@ -58,10 +41,3 @@ jobs:
         env:
           FLY_APP: $${secrets.FLY_APP}
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-      - uses: actions/upload-artifact@v3
-        with:
-          name: databases
-          path: |
-            ace_auth.db
-            ace_shard.db
-            ace_world.db
