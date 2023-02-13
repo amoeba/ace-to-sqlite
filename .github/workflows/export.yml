@@ -52,8 +52,6 @@ jobs:
         run: csvs-to-sqlite -s \t ./ace_shard/*.tsv ace_shard.db
       - name: Create World database
         run: csvs-to-sqlite -s \t ./ace_world/*.tsv ace_world.db
-      - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl auth login
       - run: datasette install datasette-publish-fly
       - run: datasette publish ace_auth.db ace_shard.db ace_world.db --app="acemu-db"
         env:
