@@ -28,11 +28,11 @@ jobs:
       - name: Install datasette and csvs-to-sqlite
         run: python3 -m pip install datasette csvs-to-sqlite
       - name: Create Auth database
-        run: csvs-to-sqlite -s $'\t' /var/lib/mysql-files/ace_auth/*.tsv ace_auth.db
+        run: csvs-to-sqlite /var/lib/mysql-files/ace_auth/*.tsv ace_auth.db -s $'\t'
       - name: Create Shard database
-        run: csvs-to-sqlite -s $'\t' /var/lib/mysql-files/ace_shard/*.tsv ace_shard.db
+        run: csvs-to-sqlite /var/lib/mysql-files/ace_shard/*.tsv ace_shard.db -s $'\t'
       - name: Create World database
-        run: csvs-to-sqlite -s $'\t' /var/lib/mysql-files/ace_world/*.tsv ace_world.db
+        run: csvs-to-sqlite /var/lib/mysql-files/ace_world/*.tsv ace_world.db -s $'\t'
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: datasette install datasette-publish-fly
       - run: datasette publish fly ace_auth.db ace_shard.db ace_world.db --app="acemu-db"
