@@ -35,7 +35,7 @@ jobs:
         run: csvs-to-sqlite /var/lib/mysql-files/ace_world/*.tsv ace_world.db -s $'\t'
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: datasette install datasette-publish-fly
-      - run: datasette publish fly ace_auth.db ace_shard.db ace_world.db --app="acemu-db"
+      - run: datasette publish fly ace_world.db --app="acemu-db"
         env:
           FLY_APP: $${secrets.FLY_APP}
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
