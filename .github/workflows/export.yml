@@ -45,8 +45,7 @@ jobs:
         with:
           name: export
       - name: Install datasette and csvs-to-sqlite
-        run: python -m pip install datasette csvs-to-sqlite
-
+        run: python3 -m pip install datasette csvs-to-sqlite
       - name: Create Auth database
         run: csvs-to-sqlite -s \t ./ace_auth/*.tsv ace_auth.db
       - name: Create Shard database
