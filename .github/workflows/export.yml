@@ -38,7 +38,7 @@ jobs:
           name: export
           path: /var/lib/mysql-files/
   publish:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     needs: export
     steps:
       - uses: actions/download-artifact@v3
@@ -46,8 +46,7 @@ jobs:
           name: export
       - name: Install datasette and csvs-to-sqlite
         run: python -m pip install datasette csvs-to-sqlite
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
+
       - name: Create Auth database
         run: csvs-to-sqlite -s \t ./ace_auth/*.tsv ace_auth.db
       - name: Create Shard database
