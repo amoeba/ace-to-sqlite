@@ -26,20 +26,10 @@ jobs:
           fileName: ACE.World*.zip
       - name: Decompress latest World release
         run: find . -iname "ACE-World*.zip" -exec unzip {} \;
-      - name: Create databases
-        run: mysql -u root --password=root -B -e "CREATE DATABASE ace_auth; CREATE DATABASE ace_shard; CREATE DATABASE ace_world;"
-      - name: Load Base
-        run: for f in $(find DatabaseSetupScripts/Base -iname "*.sql"); do mysql -u root --password=root < "$f"; done;
-      - name: Load Shard Updates
-        run: for f in $(find DatabaseSetupScripts/Updates/Shard -iname "*.sql"); do mysql --database=ace_shard -u root --password=root < "$f"; done;
-      - name: Load Authentication Updates
-        run: for f in $(find DatabaseSetupScripts/Updates/Authentication -iname "*.sql"); do mysql --database=ace_auth -u root --password=root < "$f"; done;
-      - name: Load World Updates
-        run: for f in $(find DatabaseSetupScripts/Updates/World -iname "*.sql"); do mysql --database=ace_world -u root --password=root < "$f"; done;
-      - name: Load World release
-        run: for f in $(find . -iname "ACE-World*.sql"); do mysql --database=ace_world -u root --password=root < "$f"; done;
+      - name: Load ACE SQL
+        run: sudo sh scripts/load.sh
       - name: Export ACE
-        run: sudo sh scripts/export_ace.sh
+        run: sudo sh scripts/export.sh
       - name: Relax permissions
         run: sudo chmod -R o+rwx /var/lib/mysql-files
       - uses: actions/upload-artifact@v3
@@ -53,8 +43,6 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: export
-      - name: Display structure of downloaded files
-        run: tree .
       - name: Install datasette and csvs-to-sqlite
         run: python -m pip install datasette csvs-to-sqlite
       - name: Create Auth database

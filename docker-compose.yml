@@ -13,13 +13,3 @@ services:
     restart: unless-stopped
     healthcheck:
         test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-  ace-server:
-    image: acemulator/ace:latest
-    depends_on:
-      - ace-db
-    container_name: ace-server
-    env_file:
-      - docker.env
-    ports:
-      - "9000-9001:9000-9001/udp"
-    restart: on-failure
