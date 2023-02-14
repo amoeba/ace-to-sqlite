@@ -69,10 +69,10 @@ jobs:
     steps:
       - uses: actions/download-artifact@v3
         with:
-          path: "ace_world.db"
+          name: "ace_world.db"
       - uses: actions/download-artifact@v3
         with:
-          path: "ace_pcap_exports.db"
+          name: "ace_pcap_exports.db"
       - name: Install datasette
         run: python3 -m pip install datasette
       - uses: superfly/flyctl-actions/setup-flyctl@master
