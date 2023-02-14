@@ -31,7 +31,7 @@ jobs:
         run: csvs-to-sqlite /var/lib/mysql-files/ace_world/*.tsv ace_world.db -s $'\t'
       - uses: actions/upload-artifact@v3
         with:
-          name: ace_world
+          name: ace_world.db
           path: ace_world.db
   export_ace_pcap_exports:
     runs-on: ubuntu-latest
@@ -56,12 +56,12 @@ jobs:
         run: sudo chmod -R o+rwx /var/lib/mysql-files
       - name: Install csvs-to-sqlite
         run: python3 -m pip install csvs-to-sqlite
-      - name: Create World database
-        run: csvs-to-sqlite /var/lib/mysql-files/ace_world/*.tsv ace_world.db -s $'\t'
+      - name: Create SQLite database
+        run: csvs-to-sqlite /var/lib/mysql-files/ace_world/*.tsv ace_pcap_exports.db -s $'\t'
       - uses: actions/upload-artifact@v3
         with:
-          name: ace_world
-          path: ace_world.db
+          name: ace_pcap_exports.db
+          path: ace_pcap_exports.db
   publish_with_datasette:
     runs-on: ubuntu-latest
     needs: [export_ace_world, export_ace_pcap_exports]
