@@ -56,6 +56,7 @@ jobs:
         run: sudo chmod -R o+rwx /var/lib/mysql-files
       - name: Install csvs-to-sqlite
         run: python3 -m pip install csvs-to-sqlite
+      - run: ls -al /var/lib/mysql-files/ace_world/
       - name: Create SQLite database
         run: csvs-to-sqlite /var/lib/mysql-files/ace_world/*.tsv ace_pcap_exports.db -s $'\t'
       - uses: actions/upload-artifact@v3
@@ -67,6 +68,11 @@ jobs:
     needs: [export_ace_world, export_ace_pcap_exports]
     steps:
       - uses: actions/download-artifact@v3
+        with:
+          path: "ace_world.db"
+      - uses: actions/download-artifact@v3
+        with:
+          path: "ace_pcap_exports.db"
       - name: Install datasette
         run: python3 -m pip install datasette
       - uses: superfly/flyctl-actions/setup-flyctl@master
