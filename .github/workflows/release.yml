@@ -32,7 +32,6 @@ jobs:
         run: python3 -m pip install datasette csvs-to-sqlite
       - name: Create SQLite database
         run: csvs-to-sqlite /var/lib/mysql-files/ace_world/*.tsv ace_world.db -s $'\t'
-      - uses: actions/upload-artifact@v3
+      - uses: ncipollo/release-action@v1
         with:
-          name: ace_world.db
-          path: ace_world.db
+          artifacts: "ace_world.db"
