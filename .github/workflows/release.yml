@@ -1,18 +1,38 @@
+name: Publish Release
 on:
   push:
     tags:
       - "*"
 jobs:
-  test:
+  export_ace_world_release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Start MySQL
+        run: sudo systemctl start mysql.service
       - name: Set pushed tag as an output
         id: vars
         run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
-      - name: Check output
-        env:
-          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
-        run: |
-          echo $RELEASE_VERSION
-          echo ${{ steps.vars.outputs.tag }}
+      - name: Download release
+        uses: robinraju/release-downloader@v1.7
+        with:
+          repository: ACEmulator/ACE-World-16PY-Patches
+          tag: ${{ steps.vars.outputs.tag }}
+          fileName: ACE.World*.zip
+      - name: Decompress
+        run: find . -iname "ACE-World*.zip" -exec unzip {} \;
+      - name: Load SQL
+        run: sudo sh scripts/load.sh
+      - name: Export
+        run: sudo sh scripts/export.sh
+      - name: Relax permissions
+        run: sudo chmod -R o+rwx /var/lib/mysql-files
+      - name: Install datasette and csvs-to-sqlite
+        run: python3 -m pip install datasette csvs-to-sqlite
+      - name: Create SQLite database
+        run: csvs-to-sqlite /var/lib/mysql-files/ace_world/*.tsv ace_world.db -s $'\t'
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ace_world.db
+          path: ace_world.db
