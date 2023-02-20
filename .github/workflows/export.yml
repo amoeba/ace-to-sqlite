@@ -3,7 +3,7 @@ on:
   - workflow_dispatch
 
 jobs:
-  export_ace_world:
+  export_ace_world_patches:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -27,11 +27,11 @@ jobs:
       - name: Install datasette and csvs-to-sqlite
         run: python3 -m pip install datasette csvs-to-sqlite
       - name: Create SQLite database
-        run: csvs-to-sqlite /var/lib/mysql-files/ace_world/*.tsv ace_world.db -s $'\t'
+        run: csvs-to-sqlite /var/lib/mysql-files/ace_world/*.tsv ace_world_patches.db -s $'\t'
       - uses: actions/upload-artifact@v3
         with:
-          name: ace_world.db
-          path: ace_world.db
+          name: ace_world_patches.db
+          path: ace_world_patches.db
   export_ace_pcap_exports:
     runs-on: ubuntu-latest
     steps:
@@ -62,16 +62,48 @@ jobs:
         with:
           name: ace_pcap_exports.db
           path: ace_pcap_exports.db
+  export_ace_base:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Start MySQL
+        run: sudo systemctl start mysql.service
+      - name: Download release
+        uses: robinraju/release-downloader@v1.7
+        with:
+          repository: ACEmulator/ACE-World-16PY
+          latest: true
+          fileName: ACE.World*.zip
+      - name: Decompress
+        run: find . -iname "ACE-World*.zip" -exec unzip {} \;
+      - name: Load SQL
+        run: sudo sh scripts/load.sh
+      - name: Export
+        run: sudo sh scripts/export.sh
+      - name: Relax permissions
+        run: sudo chmod -R o+rwx /var/lib/mysql-files
+      - name: Install datasette and csvs-to-sqlite
+        run: python3 -m pip install datasette csvs-to-sqlite
+      - name: Create SQLite database
+        run: csvs-to-sqlite /var/lib/mysql-files/ace_world/*.tsv ace_world_base.db -s $'\t'
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ace_world_base.db
+          path: ace_world_base.db
   publish_with_datasette:
     runs-on: ubuntu-latest
-    needs: [export_ace_world, export_ace_pcap_exports]
+    needs: [export_ace_world_patches, export_ace_pcap_exports, export_ace_base]
     steps:
       - uses: actions/download-artifact@v3
         with:
-          name: "ace_world.db"
+          name: "ace_world_patches.db"
       - uses: actions/download-artifact@v3
         with:
           name: "ace_pcap_exports.db"
+      - uses: actions/download-artifact@v3
+        with:
+          name: "ace_world_base.db"
       - name: Install datasette
         run: python3 -m pip install datasette
       - uses: superfly/flyctl-actions/setup-flyctl@master
