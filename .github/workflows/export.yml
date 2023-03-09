@@ -30,6 +30,8 @@ jobs:
         with:
           name: dbfiles
           path: ace_world.db
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
   # export_ace_pcap_exports:
   #   runs-on: ubuntu-latest
   #   steps:
