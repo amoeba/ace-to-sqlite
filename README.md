@@ -1,6 +1,6 @@
 # ace-to-sqlite
 
-Automation to export the latest release of the [ACEmulator](https://github.com/ACEmulator) data as SQLite databases served via [Datasette](https://datasette.io).
+Automation to export the latest releases of [ACEmulator](https://github.com/ACEmulator) data as SQLite databases served via [Datasette](https://datasette.io).
 
 See it live at https://acedb.treestats.net.
 
@@ -20,15 +20,13 @@ This makes that (and more) easier.
 
 ## Methodology
 
-I didn't find a good tool that can directly convert MySQL DDL (What ACE stores its data as) to SQLite DDL (what we need for loading into [Datasette](https://datasette.io) so I though the best approach would be to let MySQL help with the conversion process.
-
-The approach used here is roughly:
+I didn't find a good tool that can directly convert MySQL DDL (What ACE stores its data as) to SQLite DDL (what we need for loading into [Datasette](https://datasette.io)).
+After trying to some things, I settled on the following set of steps:
 
 - Spin up a MySQL instance
-- Load DDL files in
-- Export all databases as .tsv files
-- Run [`csvs-to-sqlite`](https://datasette.io/tools/csvs-to-sqlite) on those .tsv files to convert everything to SQLite databases
-- Host them online with [Datasette](https://datasette.io).
+- Load MySQL DDL files in
+- Run a custom version of [db-to-sqlite](https://datasette.io/tools/csvs-to-sqlite)
+- Publish to Fly.io with [Datasette](https://datasette.io).
 
 ## Running This Yourself
 
@@ -42,8 +40,8 @@ If you're interested in running the automation yourself and in another environme
 - jq
 - unzip
 - Python
-- csvs-to-sqlite (python -m pip install csvs-to-sqlite)
-  
+- db-to-sqlite (Installed from [my fork](https://github.com/amoeba/db-to-sqlite))
+
 ## Contributing
 
 Please file an [Issue](https://github.com/amoeba/ace-to-sqlite/issues) if you have any questions or commands. An example of a good type of issue to file would be if you want a datasource included here that isn't or if you find either a data or documentation issue.
