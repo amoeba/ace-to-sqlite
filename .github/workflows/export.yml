@@ -11,7 +11,7 @@ jobs:
       - name: Install datasette
         run: python3 -m pip install datasette
       - name: Install db-to-sqlite from my fork
-        run: python -m pip install "db-to-sqlite @ git+https://github.com/amoeba/db-to-sqlite#db-to-sqlite[mysql]"
+        run: python -m pip install "db-to-sqlite @ git+https://github.com/amoeba/db-to-sqlite#egg=db-to-sqlite[mysql]"
       - name: Start MySQL
         run: sudo systemctl start mysql.service
       - name: Download release
