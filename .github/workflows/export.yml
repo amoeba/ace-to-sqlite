@@ -91,6 +91,11 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
       - run: python -m pip install github-to-sqlite
+      - name: Create auth.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "{\"github_personal_token\": \"$GITHUB_TOKEN\"}" > auth.json
       - run: github-to-sqlite issues github.db acemulator/ace
       - run: github-to-sqlite pull-requests github.db acemulator/ace
       - run: github-to-sqlite issue-comments github.db acemulator/ace
