@@ -103,7 +103,7 @@ jobs:
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: datasette install datasette-publish-fly
       - run: ls -al
-      - run: datasette publish fly *db --app="acemu-db"
+      - run: datasette publish fly --metadata metadata.json --app="acemu-db" *db
         env:
           FLY_APP: $${secrets.FLY_APP}
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
