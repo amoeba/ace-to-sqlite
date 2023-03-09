@@ -25,11 +25,11 @@ jobs:
       - name: Load SQL
         run: sh scripts/load.sh
       - name: Export
-        run: sh scripts/export.sh
+        run: db-to-sqlite --all mysql://root:root@localhost/ace_world ace_world_patches.db
       - uses: actions/upload-artifact@v3
         with:
           name: ace_world_patches
-          path: ./*.db
+          path: ./ace_world_patches.db
   export_ace_pcap_exports:
     runs-on: ubuntu-latest
     steps:
@@ -52,11 +52,11 @@ jobs:
       - name: Load SQL
         run: sh scripts/load.sh
       - name: Export
-        run: sh scripts/export.sh
+        run: db-to-sqlite --all mysql://root:root@localhost/ace_world ace_pcap_exports.db
       - uses: actions/upload-artifact@v3
         with:
           name: ace_pcap_exports
-          path: ./*.db
+          path: ./ace_pcap_exports.db
   export_ace_base:
     runs-on: ubuntu-latest
     steps:
@@ -80,30 +80,30 @@ jobs:
       - name: Load SQL
         run: sh scripts/load.sh
       - name: Export
-        run: sh scripts/export.sh
+        run: db-to-sqlite --all mysql://root:root@localhost/ace_world ace_world_base.db
       - uses: actions/upload-artifact@v3
         with:
-          name: ace_base
-          path: ./*.db
-  # publish_with_datasette:
-  #   runs-on: ubuntu-latest
-  #   needs: [export_ace_world_patches, export_ace_pcap_exports, export_ace_base]
-  #   steps:
-  #     - uses: actions/download-artifact@v3
-  #       with:
-  #         name: "ace_world_patches.db"
-  #     - uses: actions/download-artifact@v3
-  #       with:
-  #         name: "ace_pcap_exports.db"
-  #     - uses: actions/download-artifact@v3
-  #       with:
-  #         name: "ace_world_base.db"
-  #     - name: Install datasette
-  #       run: python3 -m pip install datasette
-  #     - uses: superfly/flyctl-actions/setup-flyctl@master
-  #     - run: datasette install datasette-publish-fly
-  #     - run: ls -al
-  #     - run: datasette publish fly *db --app="acemu-db"
-  #       env:
-  #         FLY_APP: $${secrets.FLY_APP}
-  #         FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          name: ace_world_base
+          path: ./ace_world_base.db
+  publish_with_datasette:
+    runs-on: ubuntu-latest
+    needs: [export_ace_world_patches, export_ace_pcap_exports, export_ace_base]
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: "ace_world_patches.db"
+      - uses: actions/download-artifact@v3
+        with:
+          name: "ace_pcap_exports.db"
+      - uses: actions/download-artifact@v3
+        with:
+          name: "ace_world_base.db"
+      - name: Install datasette
+        run: python3 -m pip install datasette
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: datasette install datasette-publish-fly
+      - run: ls -al
+      - run: datasette publish fly *db --app="acemu-db"
+        env:
+          FLY_APP: $${secrets.FLY_APP}
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
