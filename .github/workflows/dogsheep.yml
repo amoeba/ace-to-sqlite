@@ -1,0 +1,16 @@
+name: Dogsheep
+on:
+  - push
+
+jobs:
+  dogsheep:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - run: python -m pip install github-to-sqlite
+      - run: github-to-sqlite releases github.db acemulator/ace
+      - uses: actions/upload-artifact@v3
+        with:
+          name: github.db
+          path: ./github.db
