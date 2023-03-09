@@ -11,6 +11,7 @@ The following data sources are included:
 - `ace_world_base`: https://github.com/ACEmulator/ACE-World-16PY
 - `ace_world_patches`: https://github.com/ACEmulator/ACE-World-16PY-Patches
 - `ace_pcap_exports`: https://github.com/ACEmulator/ACE-PCAP-Exports
+- `ace`: https://github.com/ACEmulator/ACE (via [dogsheep](https://dogsheep.github.io/))
 
 ## Rationale
 
