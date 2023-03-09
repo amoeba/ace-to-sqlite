@@ -9,6 +9,10 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
+      - name: Install datasette
+        run: python3 -m pip install datasette
+      - name: Install db-to-sqlite from my fork
+        run: python3 -m pip install "db-to-sqlite @ git+https://github.com/amoeba/db-to-sqlite#egg=db-to-sqlite[mysql]"
       - name: Start MySQL
         run: sudo systemctl start mysql.service
       - name: Set pushed tag as an output
@@ -23,15 +27,9 @@ jobs:
       - name: Decompress
         run: find . -iname "ACE-World*.zip" -exec unzip {} \;
       - name: Load SQL
-        run: sudo sh scripts/load.sh
+        run: sh scripts/load.sh
       - name: Export
-        run: sudo sh scripts/export.sh
-      - name: Relax permissions
-        run: sudo chmod -R o+rwx /var/lib/mysql-files
-      - name: Install datasette and csvs-to-sqlite
-        run: python3 -m pip install datasette csvs-to-sqlite
-      - name: Create SQLite database
-        run: csvs-to-sqlite /var/lib/mysql-files/ace_world/*.tsv ace_world.db -s $'\t'
+        run: db-to-sqlite --all mysql://root:root@localhost/ace_world ace_world.db
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "ace_world.db"
