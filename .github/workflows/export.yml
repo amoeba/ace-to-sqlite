@@ -28,67 +28,63 @@ jobs:
         run: sh scripts/export.sh
       - uses: actions/upload-artifact@v3
         with:
-          name: dbfiles
+          name: ace_world_patches
           path: ./*.db
-  # export_ace_pcap_exports:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Check out repository code
-  #       uses: actions/checkout@v3
-  #     - name: Start MySQL
-  #       run: sudo systemctl start mysql.service
-  #     - name: Download latest release
-  #       uses: robinraju/release-downloader@v1.7
-  #       with:
-  #         repository: ACEmulator/ACE-PCAP-Exports
-  #         latest: true
-  #         fileName: ACE.World*.zip
-  #     - name: Decompress
-  #       run: find . -iname "ACE-World*.zip" -exec unzip {} \;
-  #     - name: Load SQL
-  #       run: sudo sh scripts/load.sh
-  #     - name: Export
-  #       run: sudo sh scripts/export.sh
-  #     - name: Relax permissions
-  #       run: sudo chmod -R o+rwx /var/lib/mysql-files
-  #     - name: Install csvs-to-sqlite
-  #       run: python3 -m pip install csvs-to-sqlite
-  #     - run: ls -al /var/lib/mysql-files/ace_world/
-  #     - name: Create SQLite database
-  #       run: csvs-to-sqlite /var/lib/mysql-files/ace_world/*.tsv ace_pcap_exports.db -s $'\t'
-  #     - uses: actions/upload-artifact@v3
-  #       with:
-  #         name: ace_pcap_exports.db
-  #         path: ace_pcap_exports.db
-  # export_ace_base:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Check out repository code
-  #       uses: actions/checkout@v3
-  #     - name: Start MySQL
-  #       run: sudo systemctl start mysql.service
-  #     - name: Download release
-  #       uses: robinraju/release-downloader@v1.7
-  #       with:
-  #         repository: ACEmulator/ACE-World-16PY
-  #         latest: true
-  #         fileName: ACE.World*.zip
-  #     - name: Decompress
-  #       run: find . -iname "ACE-World*.zip" -exec unzip {} \;
-  #     - name: Load SQL
-  #       run: sudo sh scripts/load.sh
-  #     - name: Export
-  #       run: sudo sh scripts/export.sh
-  #     - name: Relax permissions
-  #       run: sudo chmod -R o+rwx /var/lib/mysql-files
-  #     - name: Install datasette and csvs-to-sqlite
-  #       run: python3 -m pip install datasette csvs-to-sqlite
-  #     - name: Create SQLite database
-  #       run: csvs-to-sqlite /var/lib/mysql-files/ace_world/*.tsv ace_world_base.db -s $'\t'
-  #     - uses: actions/upload-artifact@v3
-  #       with:
-  #         name: ace_world_base.db
-  #         path: ace_world_base.db
+  export_ace_pcap_exports:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Install datasette
+        run: python3 -m pip install datasette
+      - name: Install db-to-sqlite from my fork
+        run: python3 -m pip install "db-to-sqlite @ git+https://github.com/amoeba/db-to-sqlite#egg=db-to-sqlite[mysql]"
+      - name: Start MySQL
+        run: sudo systemctl start mysql.service
+      - name: Download latest release
+        uses: robinraju/release-downloader@v1.7
+        with:
+          repository: ACEmulator/ACE-PCAP-Exports
+          latest: true
+          fileName: ACE.World*.zip
+      - name: Decompress
+        run: find . -iname "ACE-World*.zip" -exec unzip {} \;
+      - name: Load SQL
+        run: sh scripts/load.sh
+      - name: Export
+        run: sh scripts/export.sh
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ace_pcap_exports
+          path: ./*.db
+  export_ace_base:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Install datasette
+        run: python3 -m pip install datasette
+      - name: Install db-to-sqlite from my fork
+        run: python3 -m pip install "db-to-sqlite @ git+https://github.com/amoeba/db-to-sqlite#egg=db-to-sqlite[mysql]"
+
+      - name: Start MySQL
+        run: sudo systemctl start mysql.service
+      - name: Download release
+        uses: robinraju/release-downloader@v1.7
+        with:
+          repository: ACEmulator/ACE-World-16PY
+          latest: true
+          fileName: ACE.World*.zip
+      - name: Decompress
+        run: find . -iname "ACE-World*.zip" -exec unzip {} \;
+      - name: Load SQL
+        run: sh scripts/load.sh
+      - name: Export
+        run: sh scripts/export.sh
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ace_base
+          path: ./*.db
   # publish_with_datasette:
   #   runs-on: ubuntu-latest
   #   needs: [export_ace_world_patches, export_ace_pcap_exports, export_ace_base]
