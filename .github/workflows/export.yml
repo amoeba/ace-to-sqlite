@@ -29,9 +29,7 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: dbfiles
-          path: ace_world.db
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
+          path: ./*.db
   # export_ace_pcap_exports:
   #   runs-on: ubuntu-latest
   #   steps:
