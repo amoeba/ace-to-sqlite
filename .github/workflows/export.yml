@@ -23,9 +23,9 @@ jobs:
       - name: Decompress
         run: find . -iname "ACE-World*.zip" -exec unzip {} \;
       - name: Load SQL
-        run: sudo sh scripts/load.sh
+        run: sh scripts/load.sh
       - name: Export
-        run: sudo sh scripts/export.sh
+        run: sh scripts/export.sh
       - uses: actions/upload-artifact@v3
         with:
           name: dbfiles
