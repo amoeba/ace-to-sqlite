@@ -43,6 +43,17 @@ If you're interested in running the automation yourself and in another environme
 - Python
 - db-to-sqlite (Installed from [my fork](https://github.com/amoeba/db-to-sqlite))
 
+# How this GitHub Repository Works
+
+This repo can automatically pull in a specific ACE database release using GitHub Actions.
+To pull a new release and re-publish the database, run:
+
+```sh
+export ACE_TAG="changeme"
+git tag -a $ACE_TAG -m "$ACE_TAG"
+git push --follow-tags
+```
+
 ## Contributing
 
 Please file an [Issue](https://github.com/amoeba/ace-to-sqlite/issues) if you have any questions or commands. An example of a good type of issue to file would be if you want a datasource included here that isn't or if you find either a data or documentation issue.
