@@ -128,7 +128,7 @@ jobs:
         with:
           name: "github.db"
       - name: Install datasette
-        run: python3 -m pip install datasette
+        run: python3 -m pip install datasette datasette-block-robots
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: datasette install datasette-publish-fly
       - run: ls -al
