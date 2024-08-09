@@ -43,7 +43,7 @@ If you're interested in running the automation yourself and in another environme
 - Python
 - db-to-sqlite (Installed from [my fork](https://github.com/amoeba/db-to-sqlite))
 
-# How this GitHub Repository Works
+## How this GitHub Repository Works
 
 This repo can automatically pull in a specific ACE database release using GitHub Actions.
 To pull a new release and re-publish the database, run:
@@ -53,6 +53,15 @@ export ACE_TAG="changeme"
 git tag -a $ACE_TAG -m "$ACE_TAG"
 git push --follow-tags
 ```
+
+## Deployment
+
+https://acedb.treestats.net/ is deployed on a private VPS running Dokku so only I can perform a deployment.
+Here are my steps:
+
+- Publish a new "latest" release by re-tagging "latest" and pushing to the repo
+- Wait for the Action to finish
+- Push to dokku VPS
 
 ## Contributing
 
