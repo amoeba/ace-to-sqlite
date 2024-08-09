@@ -133,4 +133,4 @@ jobs:
         with:
           artifacts: "*.db"
           name: latest
-          allow_updates: true
+          allowUpdates: true
