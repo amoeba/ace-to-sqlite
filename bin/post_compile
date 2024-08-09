@@ -1,1 +1,4 @@
-wget https://github.com/amoeba/ace-to-sqlite/releases/download/v0.9.281/ace_world.db
+wget https://github.com/amoeba/ace-to-sqlite/releases/download/latest/ace_pcap_exports.db
+wget https://github.com/amoeba/ace-to-sqlite/releases/download/latest/ace_world_base.db
+wget https://github.com/amoeba/ace-to-sqlite/releases/download/latest/ace_world_patches.db
+wget https://github.com/amoeba/ace-to-sqlite/releases/download/latest/github.db
