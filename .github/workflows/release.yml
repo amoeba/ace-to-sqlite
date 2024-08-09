@@ -2,7 +2,7 @@ name: Publish Release
 on:
   push:
     tags:
-      - "*"
+      - "v*"
 jobs:
   export_ace_world_release:
     runs-on: ubuntu-latest

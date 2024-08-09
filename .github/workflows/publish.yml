@@ -1,6 +1,8 @@
 name: Publish latest databases
 on:
-  - workflow_dispatch
+  push:
+    tags:
+      - "latest"
 
 jobs:
   export_ace_world_patches:
@@ -132,5 +134,4 @@ jobs:
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "*.db"
-          name: latest
           allowUpdates: true
