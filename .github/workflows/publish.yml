@@ -103,7 +103,7 @@ jobs:
         with:
           name: github.db
           path: ./github.db
-  publish_with_datasette:
+  publish_latest_databases:
     runs-on: ubuntu-latest
     permissions:
       contents: write
