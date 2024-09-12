@@ -60,6 +60,13 @@ https://acedb.treestats.net/ is deployed on a private VPS running Dokku so only 
 Here are my steps:
 
 - Publish a new "latest" release by re-tagging "latest" and pushing to the repo
+
+  ```sh
+  git tag -d latest
+  git tag -a latest -m latest
+  git push --force --tags
+  ```
+
 - Wait for the Action to finish
 - Push to dokku VPS
 
