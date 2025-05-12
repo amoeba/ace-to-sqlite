@@ -23,7 +23,7 @@ jobs:
         with:
           repository: ACEmulator/ACE-World-16PY-Patches
           tag: ${{ steps.vars.outputs.tag }}
-          fileName: *.zip
+          fileName: "*.zip"
       - name: Decompress
         run: find . -iname "*.zip" -exec unzip {} \;
       - name: Load SQL
