@@ -25,7 +25,7 @@ do
   mysql --database=ace_world -u $AUTH --password=$AUTH < "$f";
 done;
 
-find . -iname "ACE-World*.sql" | while read f
+find . -iname "*.sql" | while read f
 do
   mysql --database=ace_world -u $AUTH --password=$AUTH < "$f";
 done;
