@@ -17,7 +17,7 @@ jobs:
       - name: Start MySQL
         run: sudo systemctl start mysql.service
       - name: Download release
-        uses: robinraju/release-downloader@v1.7
+        uses: robinraju/release-downloader@v1.12
         with:
           repository: ACEmulator/ACE-World-16PY-Patches
           latest: true
@@ -44,7 +44,7 @@ jobs:
       - name: Start MySQL
         run: sudo systemctl start mysql.service
       - name: Download latest release
-        uses: robinraju/release-downloader@v1.7
+        uses: robinraju/release-downloader@v1.12
         with:
           repository: ACEmulator/ACE-PCAP-Exports
           latest: true
@@ -72,7 +72,7 @@ jobs:
       - name: Start MySQL
         run: sudo systemctl start mysql.service
       - name: Download release
-        uses: robinraju/release-downloader@v1.7
+        uses: robinraju/release-downloader@v1.12
         with:
           repository: ACEmulator/ACE-World-16PY
           latest: true
