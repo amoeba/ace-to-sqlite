@@ -28,7 +28,7 @@ jobs:
         run: sh scripts/load.sh
       - name: Export
         run: db-to-sqlite --all mysql://root:root@localhost/ace_world ace_world_patches.db
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: ace_world_patches
           path: ./ace_world_patches.db
@@ -55,7 +55,7 @@ jobs:
         run: sh scripts/load.sh
       - name: Export
         run: db-to-sqlite --all mysql://root:root@localhost/ace_world ace_pcap_exports.db
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: ace_pcap_exports
           path: ./ace_pcap_exports.db
@@ -83,7 +83,7 @@ jobs:
         run: sh scripts/load.sh
       - name: Export
         run: db-to-sqlite --all mysql://root:root@localhost/ace_world ace_world_base.db
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: ace_world_base
           path: ./ace_world_base.db
@@ -101,7 +101,7 @@ jobs:
       - run: github-to-sqlite issue-comments github.db acemulator/ace
       - run: github-to-sqlite commits github.db acemulator/ace
       - run: github-to-sqlite contributors github.db acemulator/ace
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: github.db
           path: ./github.db
@@ -119,16 +119,16 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: "ace_world_patches"
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: "ace_pcap_exports"
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: "ace_world_base"
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: "github.db"
       - uses: ncipollo/release-action@v1
