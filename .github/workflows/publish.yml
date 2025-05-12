@@ -23,7 +23,7 @@ jobs:
           latest: true
           fileName: "*.zip"
       - name: Decompress
-        run: find . -iname """ -exec unzip {} \;"
+        run: find . -iname "*.zip" -exec unzip {} \;"
       - name: Load SQL
         run: sh scripts/load.sh
       - name: Export
