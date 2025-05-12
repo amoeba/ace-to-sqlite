@@ -21,9 +21,9 @@ jobs:
         with:
           repository: ACEmulator/ACE-World-16PY-Patches
           latest: true
-          fileName: ACE.World*.zip
+          fileName: *.zip
       - name: Decompress
-        run: find . -iname "ACE-World*.zip" -exec unzip {} \;
+        run: find . -iname "*.zip" -exec unzip {} \;
       - name: Load SQL
         run: sh scripts/load.sh
       - name: Export
@@ -48,9 +48,9 @@ jobs:
         with:
           repository: ACEmulator/ACE-PCAP-Exports
           latest: true
-          fileName: ACE.World*.zip
+          fileName: *.zip
       - name: Decompress
-        run: find . -iname "ACE-World*.zip" -exec unzip {} \;
+        run: find . -iname "*.zip" -exec unzip {} \;
       - name: Load SQL
         run: sh scripts/load.sh
       - name: Export
@@ -76,9 +76,9 @@ jobs:
         with:
           repository: ACEmulator/ACE-World-16PY
           latest: true
-          fileName: ACE.World*.zip
+          fileName: *.zip
       - name: Decompress
-        run: find . -iname "ACE-World*.zip" -exec unzip {} \;
+        run: find . -iname "*.zip" -exec unzip {} \;
       - name: Load SQL
         run: sh scripts/load.sh
       - name: Export
