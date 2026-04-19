@@ -1,6 +1,6 @@
 [ace_world_patches]
 repo = "ACEmulator/ACE-World-16PY-Patches"
-tracked = "v0.9.292"
+tracked = "v0.9.293"
 version_tag = true
 
 [ace_world_base]
@@ -10,3 +10,4 @@ tracked = "v0.8.8"
 [ace_pcap_exports]
 repo = "ACEmulator/ACE-PCAP-Exports"
 tracked = "v0.4.9"
+
