@@ -1,0 +1,39 @@
+name: Sync
+
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+jobs:
+  check_and_trigger:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v6
+
+      - name: Check upstream releases
+        id: check
+        run: uv run scripts/check_releases.py
+
+      - name: Trigger update
+        if: steps.check.outputs.any_changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add config.toml
+          git commit -m "${{ steps.check.outputs.message }}"
+          git push
+          DATE_TAG=$(date -u +%Y%m%d)
+          git tag -d latest || true
+          git push origin :refs/tags/latest || true
+          git tag -a latest -m "latest"
+          git tag -a "$DATE_TAG" -m "$DATE_TAG"
+          git push --tags
