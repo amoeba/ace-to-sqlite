@@ -3,6 +3,7 @@
 Automation to export the latest releases of [ACEmulator](https://github.com/ACEmulator) data as SQLite databases served via [Datasette](https://datasette.io).
 
 See it live at https://acedb.treestats.net.
+If you want to use the output in your own application, see the latest releases. You can use the `latest` tag to float or you can follow versioned tags. Versioned tags match the tags on ACE-World-16PY-Patches so you know which version of the database you're using.
 
 ## Databases
 
@@ -26,8 +27,43 @@ After trying to some things, I settled on the following set of steps:
 
 - Spin up a MySQL instance
 - Load MySQL DDL files in
-- Run a custom version of [db-to-sqlite](https://datasette.io/tools/csvs-to-sqlite)
-- Publish to Fly.io with [Datasette](https://datasette.io).
+- Run a custom version of [db-to-sqlite](https://datasette.io/tools/db-to-sqlite)
+- Publish with [Datasette](https://datasette.io) to a VPS running [Dokku](https://dokku.com).
+
+## Updates
+
+The databases are updated automatically. A GitHub Actions workflow runs daily, checks each upstream ACEmulator repo for new releases, and — if anything changed — exports fresh SQLite databases, publishes them to the [latest release](https://github.com/amoeba/ace-to-sqlite/releases/tag/latest), and redeploys https://acedb.treestats.net. 
+
+## Using the Databases
+
+The SQLite databases are published as assets on each [GitHub Release](https://github.com/amoeba/ace-to-sqlite/releases). The `latest` release always contains the most recent versions.
+
+**Download via browser:** Go to the [latest release](https://github.com/amoeba/ace-to-sqlite/releases/tag/latest) and download whichever `.db` files you need.
+
+**Download via `gh` CLI:**
+
+```sh
+gh release download latest --repo amoeba/ace-to-sqlite --pattern "*.db"
+```
+
+Or download a specific database:
+
+```sh
+gh release download latest --repo amoeba/ace-to-sqlite --pattern "ace_world_patches.db"
+```
+
+Once downloaded, query with any SQLite tool:
+
+```sh
+sqlite3 ace_world_patches.db "SELECT * FROM weenie LIMIT 10;"
+```
+
+Or explore interactively with [Datasette](https://datasette.io):
+
+```sh
+pip install datasette
+datasette ace_world_patches.db
+```
 
 ## Running This Yourself
 
@@ -42,33 +78,6 @@ If you're interested in running the automation yourself and in another environme
 - unzip
 - Python
 - db-to-sqlite (Installed from [my fork](https://github.com/amoeba/db-to-sqlite))
-
-## How this GitHub Repository Works
-
-This repo can automatically pull in a specific ACE database release using GitHub Actions.
-To pull a new release and re-publish the database, run:
-
-```sh
-export ACE_TAG="changeme"
-git tag -a $ACE_TAG -m "$ACE_TAG"
-git push --follow-tags
-```
-
-## Deployment
-
-https://acedb.treestats.net/ is deployed on a private VPS running Dokku so only I can perform a deployment.
-Here are my steps:
-
-- Publish a new "latest" release by re-tagging "latest" and pushing to the repo
-
-  ```sh
-  git tag -d latest
-  git tag -a latest -m latest
-  git push --force --tags
-  ```
-
-- Wait for the Action to finish
-- Push to dokku VPS
 
 ## Contributing
 
