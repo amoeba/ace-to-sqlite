@@ -6,7 +6,6 @@
 import json
 import os
 import subprocess
-import sys
 import tomllib
 
 
@@ -26,6 +25,8 @@ def write_toml(path: str, config: dict) -> None:
             f.write(f"[{name}]\n")
             f.write(f'repo = "{entry["repo"]}"\n')
             f.write(f'tracked = "{entry["tracked"]}"\n')
+            if entry.get("version_tag"):
+                f.write("version_tag = true\n")
             f.write("\n")
 
 
@@ -37,6 +38,7 @@ def main() -> None:
 
     results = {}
     any_changed = False
+    release_tags = []
 
     for name, entry in config.items():
         repo = entry["repo"]
@@ -50,6 +52,8 @@ def main() -> None:
             any_changed = True
             config[name]["tracked"] = latest
             print(f"{name}: {last} -> {latest} (changed)")
+            if entry.get("version_tag"):
+                release_tags.append(latest)
         else:
             print(f"{name}: up to date ({last})")
 
@@ -69,9 +73,10 @@ def main() -> None:
             f.write(f"result={json.dumps(results)}\n")
             f.write(f"any_changed={str(any_changed).lower()}\n")
             f.write(f"message={message}\n")
+            if release_tags:
+                f.write(f"release_tags={' '.join(release_tags)}\n")
     else:
         print(json.dumps(results, indent=2))
-        sys.exit(0 if not any_changed else 0)
 
 
 if __name__ == "__main__":

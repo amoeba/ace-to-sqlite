@@ -32,8 +32,14 @@ jobs:
           git commit -m "${{ steps.check.outputs.message }}"
           git push
           DATE_TAG=$(date -u +%Y%m%d)
-          git tag -d latest || true
-          git push origin :refs/tags/latest || true
-          git tag -a latest -m "latest"
-          git tag -a "$DATE_TAG" -m "$DATE_TAG"
+          git tag -a "$DATE_TAG" -m "$DATE_TAG" || true
+          if [ -n "${{ steps.check.outputs.release_tags }}" ]; then
+            for tag in ${{ steps.check.outputs.release_tags }}; do
+              git tag -a "$tag" -m "$tag" || true
+            done
+          else
+            git tag -d latest || true
+            git push origin :refs/tags/latest || true
+            git tag -a latest -m "latest"
+          fi
           git push --tags
