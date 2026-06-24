@@ -2,8 +2,11 @@ name: Publish latest databases
 on:
   push:
     tags:
-      - "latest"
       - "v*"
+
+concurrency:
+  group: publish-latest
+  cancel-in-progress: false
 
 jobs:
   export_ace_world_patches:
