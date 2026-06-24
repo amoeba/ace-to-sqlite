@@ -1,0 +1,22 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: dokku-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy_to_dokku:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Push to Dokku
+        uses: dokku/github-action@v1.10.0
+        with:
+          git_remote_url: 'ssh://dokku@${{ secrets.DOKKU_HOST }}/${{ secrets.DOKKU_APP_NAME }}'
+          ssh_private_key: ${{ secrets.DOKKU_SSH_PRIVATE_KEY }}
+          branch: main
