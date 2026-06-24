@@ -1,4 +1,4 @@
-name: Deploy to Dokku (manual)
+name: Deploy
 
 on:
   workflow_dispatch:
