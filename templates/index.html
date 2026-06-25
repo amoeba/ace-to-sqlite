@@ -1,0 +1,13 @@
+{% extends "default:index.html" %}
+
+{% block content %}
+<section class="block">
+  {% for row in sql("select patch_Version as version, last_Modified as last_modified from version", database="ace_world_patches") %}
+    <p>ace_world_patches version {{ row.version }} (released {{ row.last_modified }})</p>
+  {% else %}
+    <p>Version data unavailable.</p>
+  {% endfor %}
+</section>
+
+{{ super() }}
+{% endblock %}

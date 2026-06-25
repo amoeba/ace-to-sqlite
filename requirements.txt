@@ -1,3 +1,4 @@
 datasette
 csvs-to-sqlite
 datasette-block-robots
+datasette-template-sql
