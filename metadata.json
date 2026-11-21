@@ -4,5 +4,31 @@
   "license": "AGPL",
   "license_url": "https://www.gnu.org/licenses/agpl-3.0.en.html",
   "source": "ACEmulator Project",
-  "source_url": "https://github.com/ACEmulator"
+  "source_url": "https://github.com/ACEmulator",
+  "databases": {
+    "ace_world_patches": {
+      "license": "AGPL",
+      "license_url": "https://www.gnu.org/licenses/agpl-3.0.en.html",
+      "source": "ACEmulator Project",
+      "source_url": "https://github.com/ACEmulator"
+    },
+    "ace_world_base": {
+      "license": "AGPL",
+      "license_url": "https://www.gnu.org/licenses/agpl-3.0.en.html",
+      "source": "ACEmulator Project",
+      "source_url": "https://github.com/ACEmulator"
+    },
+    "ace_pcap_exports": {
+      "license": "AGPL",
+      "license_url": "https://www.gnu.org/licenses/agpl-3.0.en.html",
+      "source": "ACEmulator Project",
+      "source_url": "https://github.com/ACEmulator"
+    },
+    "github": {
+      "license": "AGPL",
+      "license_url": "https://www.gnu.org/licenses/agpl-3.0.en.html",
+      "source": "ACEmulator Project",
+      "source_url": "https://github.com/ACEmulator"
+    }
+  }
 }
