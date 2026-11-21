@@ -61,45 +61,13 @@ sqlite3 ace_world_patches.db "SELECT * FROM weenie LIMIT 10;"
 Or explore interactively with [Datasette](https://datasette.io):
 
 ```sh
-pip install "datasette>=1.0a43"
+pip install datasette
 datasette ace_world_patches.db
 ```
-
-### Arrow exports
-
-The Datasette instance at https://acedb.treestats.net also serves [Apache Arrow IPC streams](https://arrow.apache.org/docs/format/Columnar.html#ipc-streaming-format) via [datasette-arrows](https://github.com/datasette/datasette-arrows). Add `.arrows` to any table, view, row, or SQL query URL:
-
-```
-https://acedb.treestats.net/ace_world_patches/weenie.arrows?_stream=1
-https://acedb.treestats.net/ace_world_patches/-/query.arrows?sql=select+*+from+weenie+limit+10
-```
-
-`?_stream=1` exports every row; without it only a single page is returned. Filters, sorting, and `?_col=` work the same way as on HTML pages. This instance sets Datasette's `max_stream_mb` to 200 MB, so larger exports will be cut off.
-
-Read a stream in Python:
-
-```sh
-pip install pyarrow
-python - <<'PY'
-import urllib.request
-import pyarrow as pa
-
-url = "https://acedb.treestats.net/ace_world_patches/weenie.arrows?_stream=1"
-with urllib.request.urlopen(url) as response:
-    table = pa.ipc.open_stream(response).read_all()
-print(table.num_rows)
-PY
-```
-
-The plugin and its streaming support currently require prerelease versions: `datasette-arrows>=0.1a0` and `datasette>=1.0a43`, as specified in `requirements.txt`.
-
-Datasette 1.0 also changed the JSON API: table query results use column and row objects instead of parallel arrays, and a single-row URL returns `{"row": ...}` instead of `{"rows": [...]}`. See the [Datasette upgrade guide](https://docs.datasette.io/en/latest/upgrade_guide.html) if you consume those endpoints.
 
 ## Running This Yourself
 
 This automation is a GitHub Action so please look at https://github.com/amoeba/ace-to-sqlite/blob/main/.github/workflows/export.yml for the steps.
-
-The Datasette app runs in configuration-directory mode (`datasette .`). `plugins/propagate_metadata.py` copies the license and source fields in `metadata.json` down to each table, because Datasette 1.0 removed metadata fallback.
 
 If you're interested in running the automation yourself and in another environment, look at https://github.com/amoeba/ace-to-sqlite/blob/main/scripts/generate_world_database.sh which will download and convert the latest ACE World release to SQLite. Its requirements are:
 
