@@ -1,4 +1,5 @@
-datasette
+datasette>=1.0a43
 csvs-to-sqlite
 datasette-block-robots
 datasette-template-sql
+datasette-arrows>=0.1a0
